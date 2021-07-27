@@ -1,17 +1,15 @@
 package com.teamspace.oauth.kakao;
 
+import com.teamspace.dto.AccessTokenDTO;
+import com.teamspace.dto.UserInfoDTO;
 import com.teamspace.oauth.Oauth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 @Service
 public class KakaoOauthService implements Oauth {
@@ -29,6 +27,7 @@ public class KakaoOauthService implements Oauth {
         this.kakaoOauthUtil = kakaoOauthUtil;
         this.webClient = builder
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .build();
         this.clientId = kakaoOauthUtil.getClientId();
         this.clientSecret = kakaoOauthUtil.getClientSecret();
@@ -41,7 +40,7 @@ public class KakaoOauthService implements Oauth {
 
 
     @Override
-    public String getAccessToken(String code) {
+    public AccessTokenDTO getAccessToken(String code) {
 
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
         requestData.add("grant_type",grantType);
@@ -50,20 +49,27 @@ public class KakaoOauthService implements Oauth {
         requestData.add("code", code);
         requestData.add("client_secret", clientSecret);
 
-        Optional<String> result = webClient
+        return webClient
                 .post()
                 .uri("https://kauth.kakao.com/oauth/token")
                 .body(BodyInserters.fromFormData(requestData))
                 .retrieve()
-                .bodyToMono(String.class)
-                .blockOptional();
+                .bodyToMono(AccessTokenDTO.class)
+                .blockOptional()
+                .orElseThrow(RuntimeException::new);
 
-        System.out.println(result);
-        return "잘 들어왔니?~~";
     }
 
     @Override
-    public String getUserInfo(String accessToken) {
-        return null;
+    public UserInfoDTO getUserInfo(String accessToken) {
+        System.out.println("accessToken = " + accessToken);
+        return webClient
+                .post()
+                .uri("https://kapi.kakao.com/v2/user/me")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(UserInfoDTO.class)
+                .blockOptional()
+                .orElseThrow(RuntimeException::new);
     }
 }

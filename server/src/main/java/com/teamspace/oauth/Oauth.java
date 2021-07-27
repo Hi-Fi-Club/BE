@@ -1,8 +1,11 @@
 package com.teamspace.oauth;
 
+import com.teamspace.dto.AccessTokenDTO;
+import com.teamspace.dto.UserInfoDTO;
+
 public interface Oauth {
 
-    String getAccessToken(String code);
+    AccessTokenDTO getAccessToken(String code);
 
-    String getUserInfo(String accessToken);
+    UserInfoDTO getUserInfo(String accessToken);
 }
