@@ -18,6 +18,13 @@ public class KakaoAccountDTO {
     private boolean hasGender;
     private boolean genderNeedsAgreement;
     private String gender;
+    private boolean hasAgeRange;
+    private boolean ageRangeNeedsAgreement;
+    private String ageRange;
+    private boolean hasBirthday;
+    private boolean birthdayNeedsAgreement;
+    private String birthday;
+    private String brithdayType;
 
     @Override
     public String toString() {
@@ -32,6 +39,13 @@ public class KakaoAccountDTO {
                 ", hasGender=" + hasGender +
                 ", genderNeedsAgreement=" + genderNeedsAgreement +
                 ", gender='" + gender + '\'' +
+                ", hasAgeRange=" + hasAgeRange +
+                ", ageRangeNeedsAgreement=" + ageRangeNeedsAgreement +
+                ", ageRange='" + ageRange + '\'' +
+                ", hasBirthday=" + hasBirthday +
+                ", birthdayNeedsAgreement=" + birthdayNeedsAgreement +
+                ", birthday='" + birthday + '\'' +
+                ", brithdayType='" + brithdayType + '\'' +
                 '}';
     }
 }
