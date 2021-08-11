@@ -72,4 +72,24 @@ public class KakaoOauthService implements Oauth {
                 .blockOptional()
                 .orElseThrow(RuntimeException::new);
     }
+
+    public String logout(String accessToken) {
+        System.out.println("accessToken = " + accessToken);
+        return webClient
+                .post()
+                .uri("https://kapi.kakao.com/v1/user/logout")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(String.class)
+                .blockOptional()
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public void additionLogout() {
+         webClient
+                .get()
+                .uri("https://kauth.kakao.com/oauth/logout?client_id=23782940861ed1c764f28841b9f83c80&logout_redirect_uri=http://localhost:8080/login.html");
+    }
+
+
 }

@@ -45,4 +45,18 @@ public class UserService {
 
         return UserResponseDTO.of(user, jwtToken);
     }
+
+    public void logout(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
+        /*
+        TODO : accessToken 만료시키는 로직
+         */
+        String userInfo = kakaoOauthService.logout(user.getAccessToken());
+        System.out.println("userInfo = " + userInfo);
+        user.removeAccessToken();
+        userRepository.save(user);
+         /*
+        TODO : html의 세션 만료시키는 로직
+         */
+    }
 }

@@ -55,6 +55,10 @@ public class User {
                 .build();
     }
 
+    public void removeAccessToken() {
+        this.accessToken = null;
+    }
+
     @Override
     public String toString() {
         return "User{" +
