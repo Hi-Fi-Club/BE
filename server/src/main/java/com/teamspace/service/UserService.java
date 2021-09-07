@@ -59,4 +59,13 @@ public class UserService {
         TODO : html의 세션 만료시키는 로직
          */
     }
+
+    public void mainCategory() {
+    }
+
+    public void detailCategory(Long mainId) {
+    }
+
+    public void userSelectedInterest(Long userId) {
+    }
 }
