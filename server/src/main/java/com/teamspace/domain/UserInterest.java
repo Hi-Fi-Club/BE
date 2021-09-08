@@ -1,6 +1,8 @@
 package com.teamspace.domain;
 
+import com.teamspace.dto.request.UserInterestsDTO;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_interest")
+@Builder
 public class UserInterest {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +26,11 @@ public class UserInterest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static UserInterest createUserInterest(InterestDetailCategory interestDetailCategory, User user){
+        return  UserInterest.builder()
+                .interestDetailCategory(interestDetailCategory)
+                .user(user)
+                .build();
+    }
 }
