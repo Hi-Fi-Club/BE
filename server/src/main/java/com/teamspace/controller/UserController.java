@@ -38,9 +38,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "관심분야 세부 카테고리" , notes = "유저가 큰 카테고리를 선택하면, 그에 해당하는 세부 카테고리 목록을 클라이언트에 전달한다.")
-    @GetMapping("/user/interests/{mainId}")
-    public ResponseEntity detailCategory(@PathVariable Long mainId) {
-        userService.detailCategory(mainId);
+    @GetMapping("/user/interests/{categoryId}")
+    public ResponseEntity detailCategory(@PathVariable Long categoryId) {
+        userService.detailCategory(categoryId);
         return ResponseEntity.ok().body("OK");
     }
 
