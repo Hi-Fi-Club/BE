@@ -2,8 +2,8 @@ package com.teamspace.controller;
 
 import com.teamspace.dto.LoginDTO;
 import com.teamspace.dto.UserResponseDTO;
+import com.teamspace.dto.request.UserInterestsDTO;
 import com.teamspace.service.UserService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -38,19 +38,18 @@ public class UserController {
     }
 
     @ApiOperation(value = "관심분야 세부 카테고리" , notes = "유저가 큰 카테고리를 선택하면, 그에 해당하는 세부 카테고리 목록을 클라이언트에 전달한다.")
-    @GetMapping("/user/interests/{mainId}")
-    public ResponseEntity detailCategory(@PathVariable Long mainId) {
-        userService.detailCategory(mainId);
+    @GetMapping("/user/interests/{categoryId}")
+    public ResponseEntity detailCategory(@PathVariable Long categoryId) {
+        userService.detailCategory(categoryId);
         return ResponseEntity.ok().body("OK");
     }
 
     @ApiOperation(value = "유저가 선택한 관심정보" , notes = "유저가 선택한 세부 카테고리의 목록을 서버에 전달한다.")
     @PostMapping("/user/interests")
-    public ResponseEntity userSelectedInterest(@ApiParam(hidden = true) @RequestAttribute Long userId) {
-        userService.userSelectedInterest(userId);
+    public ResponseEntity userSelectedInterest(@RequestBody UserInterestsDTO userInterestsDTO,
+                                               @ApiParam(hidden = true) @RequestAttribute Long userId) {
+
+        userService.userSelectedInterest(userId, userInterestsDTO);
         return ResponseEntity.ok().body("OK");
     }
-
-
-
 }
