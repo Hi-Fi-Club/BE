@@ -5,11 +5,14 @@ import com.teamspace.domain.User;
 import com.teamspace.domain.UserInterest;
 import com.teamspace.dto.LoginDTO;
 import com.teamspace.dto.UserInfoDTO;
-import com.teamspace.dto.UserResponseDTO;
-import com.teamspace.dto.request.UserInterestsDTO;
+import com.teamspace.dto.response.UserResponseDTO;
+import com.teamspace.dto.request.interest.UserInterestsDTO;
+import com.teamspace.dto.response.interest.DetailCategoryResponseDTO;
+import com.teamspace.dto.response.interest.MainCategoryResponseDTO;
 import com.teamspace.exception.UserNotFoundException;
 import com.teamspace.oauth.kakao.KakaoOauthService;
 import com.teamspace.repository.InterestDetailCategoryRepository;
+import com.teamspace.repository.InterestMainCategoryRepository;
 import com.teamspace.repository.UserInterestRepository;
 import com.teamspace.repository.UserRepository;
 import com.teamspace.util.JWTUtil;
@@ -26,6 +29,7 @@ public class UserService {
     private final KakaoOauthService kakaoOauthService;
     private final UserRepository userRepository;
     private final UserInterestRepository userInterestRepository;
+    private final InterestMainCategoryRepository interestMainCategoryRepository;
     private final InterestDetailCategoryRepository interestDetailCategoryRepository;
 
     private boolean verifyUser(String userEmail) {
@@ -65,22 +69,24 @@ public class UserService {
 
     public void logout(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
-        /*
-        TODO : accessToken 만료시키는 로직
-         */
         String userInfo = kakaoOauthService.logout(user.getAccessToken());
         System.out.println("userInfo = " + userInfo);
         user.removeAccessToken();
         userRepository.save(user);
-         /*
-        TODO : html의 세션 만료시키는 로직
-         */
     }
 
-    public void mainCategory() {
+    public List<MainCategoryResponseDTO> mainCategory() {
+        return interestMainCategoryRepository.findAll()
+                .stream()
+                .map(mainCategory -> MainCategoryResponseDTO.from(mainCategory))
+                .collect(Collectors.toList());
     }
 
-    public void detailCategory(Long mainId) {
+    public List<DetailCategoryResponseDTO> detailCategory(Long mainId) {
+        return interestDetailCategoryRepository.findAllByInterestMainCategory_Id(mainId)
+                .stream()
+                .map(detailCategory -> DetailCategoryResponseDTO.from(detailCategory))
+                .collect(Collectors.toList());
     }
 
     public void userSelectedInterest(Long userId, UserInterestsDTO userInterestsDTO) {

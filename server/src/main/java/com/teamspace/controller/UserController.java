@@ -1,8 +1,8 @@
 package com.teamspace.controller;
 
 import com.teamspace.dto.LoginDTO;
-import com.teamspace.dto.UserResponseDTO;
-import com.teamspace.dto.request.UserInterestsDTO;
+import com.teamspace.dto.response.UserResponseDTO;
+import com.teamspace.dto.request.interest.UserInterestsDTO;
 import com.teamspace.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,15 +33,13 @@ public class UserController {
     @ApiOperation(value = "관심분야 큰 카테고리" , notes = "유저가 선택할 수 있는 관심분야 목록을 클라이언트에 전달한다.")
     @GetMapping("/user/interests")
     public ResponseEntity mainCategory() {
-        userService.mainCategory();
-        return ResponseEntity.ok().body("OK");
+        return ResponseEntity.ok().body(userService.mainCategory());
     }
 
     @ApiOperation(value = "관심분야 세부 카테고리" , notes = "유저가 큰 카테고리를 선택하면, 그에 해당하는 세부 카테고리 목록을 클라이언트에 전달한다.")
-    @GetMapping("/user/interests/{categoryId}")
-    public ResponseEntity detailCategory(@PathVariable Long categoryId) {
-        userService.detailCategory(categoryId);
-        return ResponseEntity.ok().body("OK");
+    @GetMapping("/user/interests/{mainId}")
+    public ResponseEntity detailCategory(@PathVariable Long mainId) {
+        return ResponseEntity.ok().body(userService.detailCategory(mainId));
     }
 
     @ApiOperation(value = "유저가 선택한 관심정보" , notes = "유저가 선택한 세부 카테고리의 목록을 서버에 전달한다.")

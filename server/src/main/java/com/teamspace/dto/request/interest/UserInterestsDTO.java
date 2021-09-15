@@ -1,4 +1,4 @@
-package com.teamspace.dto.request;
+package com.teamspace.dto.request.interest;
 
 import lombok.Getter;
 

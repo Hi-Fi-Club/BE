@@ -1,4 +1,4 @@
-package com.teamspace.dto;
+package com.teamspace.dto.response;
 
 import com.teamspace.domain.User;
 import com.teamspace.domain.UserInterest;
