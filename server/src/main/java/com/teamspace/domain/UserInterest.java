@@ -1,6 +1,5 @@
 package com.teamspace.domain;
 
-import com.teamspace.dto.request.UserInterestsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -40,7 +40,7 @@ public class JWTUtil {
     private static DecodedJWT verifyToken(String token) {
         try {
             JWTVerifier verifier = JWT.require(algorithmHS)
-                    .acceptExpiresAt(604800)
+                    .acceptExpiresAt(600)
                     .build();
             return verifier.verify(token);
         } catch (TokenExpiredException e) {
