@@ -17,6 +17,8 @@ import com.teamspace.repository.UserInterestRepository;
 import com.teamspace.repository.UserRepository;
 import com.teamspace.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +28,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private final KakaoOauthService kakaoOauthService;
     private final UserRepository userRepository;
     private final UserInterestRepository userInterestRepository;
     private final InterestMainCategoryRepository interestMainCategoryRepository;
     private final InterestDetailCategoryRepository interestDetailCategoryRepository;
+
+
 
     private boolean verifyUser(String userEmail) {
         return userRepository.findByEmail(userEmail).isPresent();
@@ -70,7 +76,7 @@ public class UserService {
     public void logout(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(RuntimeException::new);
         String userInfo = kakaoOauthService.logout(user.getAccessToken());
-        System.out.println("userInfo = " + userInfo);
+        logger.info("userInfo = " + userInfo);
         user.removeAccessToken();
         userRepository.save(user);
     }

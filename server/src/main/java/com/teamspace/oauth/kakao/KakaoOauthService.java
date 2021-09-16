@@ -2,14 +2,17 @@ package com.teamspace.oauth.kakao;
 
 import com.teamspace.dto.AccessTokenDTO;
 import com.teamspace.dto.UserInfoDTO;
+import com.teamspace.exception.OauthException;
 import com.teamspace.oauth.Oauth;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class KakaoOauthService implements Oauth {
@@ -38,14 +41,13 @@ public class KakaoOauthService implements Oauth {
     }
 
 
-
     @Override
     public AccessTokenDTO getAccessToken(String code) {
 
         MultiValueMap<String, String> requestData = new LinkedMultiValueMap<>();
-        requestData.add("grant_type",grantType);
+        requestData.add("grant_type", grantType);
         requestData.add("client_id", clientId);
-        requestData.add("redirect_uri",redirectUri);
+        requestData.add("redirect_uri", redirectUri);
         requestData.add("code", code);
         requestData.add("client_secret", clientSecret);
 
@@ -54,6 +56,16 @@ public class KakaoOauthService implements Oauth {
                 .uri("https://kauth.kakao.com/oauth/token")
                 .body(BodyInserters.fromFormData(requestData))
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, response -> {
+                    return response.bodyToMono(String.class).flatMap(error -> {
+                        return Mono.error(new OauthException(error, "getAccessToken"));
+                    });
+                })
+                .onStatus(HttpStatus::is5xxServerError, response -> {
+                    return response.bodyToMono(String.class).flatMap(error -> {
+                        return Mono.error(new OauthException(error, "getAccessToken"));
+                    });
+                })
                 .bodyToMono(AccessTokenDTO.class)
                 .blockOptional()
                 .orElseThrow(RuntimeException::new);
@@ -68,6 +80,16 @@ public class KakaoOauthService implements Oauth {
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, response -> {
+                    return response.bodyToMono(String.class).flatMap(error -> {
+                        return Mono.error(new OauthException(error, "getUserInfo"));
+                    });
+                })
+                .onStatus(HttpStatus::is5xxServerError, response -> {
+                    return response.bodyToMono(String.class).flatMap(error -> {
+                        return Mono.error(new OauthException(error, "getUserInfo"));
+                    });
+                })
                 .bodyToMono(UserInfoDTO.class)
                 .blockOptional()
                 .orElseThrow(RuntimeException::new);
@@ -80,13 +102,23 @@ public class KakaoOauthService implements Oauth {
                 .uri("https://kapi.kakao.com/v1/user/logout")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, response -> {
+                    return response.bodyToMono(String.class).flatMap(error -> {
+                        return Mono.error(new OauthException(error, "logout"));
+                    });
+                })
+                .onStatus(HttpStatus::is5xxServerError, response -> {
+                    return response.bodyToMono(String.class).flatMap(error -> {
+                        return Mono.error(new OauthException(error, "logout"));
+                    });
+                })
                 .bodyToMono(String.class)
                 .blockOptional()
                 .orElseThrow(RuntimeException::new);
     }
 
     public void additionLogout() {
-         webClient
+        webClient
                 .get()
                 .uri("https://kauth.kakao.com/oauth/logout?client_id=23782940861ed1c764f28841b9f83c80&logout_redirect_uri=http://localhost:8080/login.html");
     }
