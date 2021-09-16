@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler({OauthException.class, AccessTokenNotFoundException.class,
+    @ExceptionHandler({AccessTokenNotFoundException.class,
             UserNotFoundException.class, UserIllegalException.class})
     protected ResponseEntity handleException(Exception e) {
         logger.error(e.getMessage());
@@ -21,8 +21,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(JWTTokenException.class)
-    protected ResponseEntity handleJwtTokenException(Exception e){
+    protected ResponseEntity handleJwtTokenException(Exception e) {
         logger.error(e.getMessage());
         return new ResponseEntity(new ExceptionResponseDTO(e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(OauthException.class)
+    protected ResponseEntity handleOauthException(Exception e) {
+        logger.error(e.getMessage());
+        return new ResponseEntity(new ExceptionResponseDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 }
