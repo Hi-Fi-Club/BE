@@ -95,7 +95,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void userSelectedInterest(Long userId, UserInterestsDTO userInterestsDTO) {
+    public void userSelectedInterestCategory(Long userId, UserInterestsDTO userInterestsDTO) {
 
         User user = findUser(userId);
 
@@ -107,5 +107,11 @@ public class UserService {
             userInterestRepository.saveAll(userInterests);
         }
 
+    }
+
+    public void userSelectedInterestSpot(Long userId) {
+    }
+
+    public void userSelectedInterests(Long userId) {
     }
 }
