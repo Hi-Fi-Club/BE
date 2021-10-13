@@ -54,6 +54,14 @@ public class UserService {
         return interestDetailCategoryRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
+    private List<UserInterest> findUserInterests(Long id) {
+        return userInterestRepository.findAllByUser(id);
+    }
+
+    private List<UserSpot> findUserSpots(Long id) {
+        return userSpotRepository.findAllByUser(id);
+    }
+
     public UserResponseDTO login(LoginDTO loginDTO) {
         String accessToken = kakaoOauthService.getAccessToken(loginDTO.getCode()).getAccessToken();
         UserInfoDTO userInfo = kakaoOauthService.getUserInfo(accessToken);
@@ -81,6 +89,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public JWTUserInfoResponseDTO getUserInfo(Long userId) {
+        User user = findUser(userId);
+        return JWTUserInfoResponseDTO.of(user);
+    }
+
     public List<MainCategoryResponseDTO> mainCategory() {
         return interestMainCategoryRepository.findAll()
                 .stream()
@@ -95,7 +108,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void userSelectedInterest(Long userId, UserInterestsDTO userInterestsDTO) {
+    public void userSelectedInterestCategory(Long userId, UserInterestsDTO userInterestsDTO) {
 
         User user = findUser(userId);
 
@@ -107,5 +120,11 @@ public class UserService {
             userInterestRepository.saveAll(userInterests);
         }
 
+    }
+
+    public void userSelectedInterestSpot(Long userId) {
+    }
+
+    public void userSelectedInterests(Long userId) {
     }
 }
