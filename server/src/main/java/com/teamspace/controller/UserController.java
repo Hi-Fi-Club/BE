@@ -1,8 +1,11 @@
 package com.teamspace.controller;
 
-import com.teamspace.dto.LoginDTO;
+import com.teamspace.dto.oAuth.LoginDTO;
+import com.teamspace.dto.request.UserInterestsAndSpotsRequestDTO;
+import com.teamspace.dto.request.spot.UserSpotsRequestDTO;
+import com.teamspace.dto.response.JWTUserInfoResponseDTO;
 import com.teamspace.dto.response.UserResponseDTO;
-import com.teamspace.dto.request.interest.UserInterestsDTO;
+import com.teamspace.dto.request.interest.UserInterestsRequestDTO;
 import com.teamspace.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -50,7 +53,7 @@ public class UserController {
 
     @ApiOperation(value = "유저가 선택한 관심정보" , notes = "유저가 선택한 세부 카테고리의 목록을 서버에 전달한다.")
     @PostMapping("/user/interests/category")
-    public ResponseEntity userSelectedInterestCategory(@RequestBody UserInterestsDTO userInterestsDTO,
+    public ResponseEntity userSelectedInterestCategory(@RequestBody UserInterestsRequestDTO userInterestsDTO,
                                                @ApiParam(hidden = true) @RequestAttribute Long userId) {
         userService.userSelectedInterestCategory(userId, userInterestsDTO);
         return ResponseEntity.ok().body("OK");
@@ -58,15 +61,17 @@ public class UserController {
 
     @ApiOperation(value = "유저가 선택한 관심지역 등록" , notes = "유저가 선택한 관심지역 정보를 서버에 전달한다.")
     @PostMapping("/user/interests/spot")
-    public ResponseEntity userSelectedInterestSpot(@ApiParam(hidden = true) @RequestAttribute Long userId) {
-        userService.userSelectedInterestSpot(userId);
+    public ResponseEntity userSelectedInterestSpot(@RequestBody UserSpotsRequestDTO userSpotsDTO,
+                                                   @ApiParam(hidden = true) @RequestAttribute Long userId) {
+        userService.userSelectedInterestSpot(userId, userSpotsDTO);
         return ResponseEntity.ok().body("OK");
     }
 
     @ApiOperation(value = "유저가 선택한 관심등록" , notes = "유저가 선택한 관심 및 관심지역 정보를 서버에 전달한다.")
     @PostMapping("/user/interests")
-    public ResponseEntity userSelectedInterests(@ApiParam(hidden = true) @RequestAttribute Long userId) {
-        userService.userSelectedInterests(userId);
+    public ResponseEntity userSelectedInterests(@RequestBody UserInterestsAndSpotsRequestDTO userInterestsAndSpotsDTO,
+                                                @ApiParam(hidden = true) @RequestAttribute Long userId) {
+        userService.userSelectedInterests(userId, userInterestsAndSpotsDTO);
         return ResponseEntity.ok().body("OK");
     }
 

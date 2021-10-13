@@ -22,4 +22,12 @@ public class InterestMainCategory {
 
     @OneToMany(mappedBy = "interestMainCategory")
     private List<InterestDetailCategory> interestDetailCategories = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "InterestMainCategory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

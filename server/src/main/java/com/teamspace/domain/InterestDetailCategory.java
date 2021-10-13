@@ -26,4 +26,13 @@ public class InterestDetailCategory {
 
     @OneToMany(mappedBy = "interestDetailCategory")
     private List<UserInterest> userInterests = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "InterestDetailCategory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", interestMainCategory=" + interestMainCategory +
+                '}';
+    }
 }
