@@ -13,5 +13,4 @@ public class SwaggerController {
     public String getApiDocs(){
         return "redirect:/swagger-ui/index.html";
     }
-
 }

@@ -25,6 +25,4 @@ public class KakaoOauthUtil {
 
     @Value("${kakao.grant.type}")
     private String grantType;
-
-
 }

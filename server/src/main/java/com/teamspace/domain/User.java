@@ -1,10 +1,7 @@
 package com.teamspace.domain;
 
-import com.teamspace.dto.UserInfoDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.teamspace.dto.oAuth.UserInfoDTO;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,6 +29,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<UserInterest> userInterests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserSpot> userSpots = new ArrayList<>();
 
     public void updateUser(String accessToken) {
         this.accessToken = accessToken;
@@ -72,6 +72,7 @@ public class User {
                 ", accessToken='" + accessToken + '\'' +
                 ", phone='" + phone + '\'' +
                 ", userInterests=" + userInterests +
+                ", userSpots=" + userSpots +
                 '}';
     }
 }

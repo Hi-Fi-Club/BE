@@ -1,6 +1,6 @@
 package com.teamspace.exception;
 
-import com.teamspace.dto.ExceptionResponseDTO;
+import com.teamspace.dto.response.ExceptionResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

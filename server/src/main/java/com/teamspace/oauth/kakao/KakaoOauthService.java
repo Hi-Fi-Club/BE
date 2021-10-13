@@ -1,7 +1,7 @@
 package com.teamspace.oauth.kakao;
 
-import com.teamspace.dto.AccessTokenDTO;
-import com.teamspace.dto.UserInfoDTO;
+import com.teamspace.dto.oAuth.AccessTokenDTO;
+import com.teamspace.dto.oAuth.UserInfoDTO;
 import com.teamspace.exception.OauthException;
 import com.teamspace.oauth.Oauth;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +39,6 @@ public class KakaoOauthService implements Oauth {
         this.redirectUri = kakaoOauthUtil.getRedirectUri();
         this.grantType = kakaoOauthUtil.getGrantType();
     }
-
 
     @Override
     public AccessTokenDTO getAccessToken(String code) {
@@ -122,6 +121,4 @@ public class KakaoOauthService implements Oauth {
                 .get()
                 .uri("https://kauth.kakao.com/oauth/logout?client_id=23782940861ed1c764f28841b9f83c80&logout_redirect_uri=http://localhost:8080/login.html");
     }
-
-
 }

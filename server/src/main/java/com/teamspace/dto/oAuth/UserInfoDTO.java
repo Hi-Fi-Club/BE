@@ -1,4 +1,4 @@
-package com.teamspace.dto;
+package com.teamspace.dto.oAuth;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
