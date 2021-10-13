@@ -4,7 +4,7 @@ package com.teamspace.dto.request.interest;
 import lombok.Getter;
 
 @Getter
-public class UserSelectedInterestsDTO {
+public class UserSelectedInterestsRequestDTO {
 
     private Long mainId;
     private Long detailId;

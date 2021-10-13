@@ -5,9 +5,8 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class UserInterestsDTO {
+public class UserInterestsRequestDTO {
 
         private Long userId;
-        private List<UserSelectedInterestsDTO> interests;
-
+        private List<UserSelectedInterestsRequestDTO> interests;
 }

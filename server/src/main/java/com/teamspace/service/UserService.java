@@ -3,18 +3,19 @@ package com.teamspace.service;
 import com.teamspace.domain.InterestDetailCategory;
 import com.teamspace.domain.User;
 import com.teamspace.domain.UserInterest;
-import com.teamspace.dto.LoginDTO;
-import com.teamspace.dto.UserInfoDTO;
+import com.teamspace.domain.UserSpot;
+import com.teamspace.dto.oAuth.LoginDTO;
+import com.teamspace.dto.oAuth.UserInfoDTO;
+import com.teamspace.dto.request.UserInterestsAndSpotsRequestDTO;
+import com.teamspace.dto.request.spot.UserSpotsRequestDTO;
+import com.teamspace.dto.response.JWTUserInfoResponseDTO;
 import com.teamspace.dto.response.UserResponseDTO;
-import com.teamspace.dto.request.interest.UserInterestsDTO;
+import com.teamspace.dto.request.interest.UserInterestsRequestDTO;
 import com.teamspace.dto.response.interest.DetailCategoryResponseDTO;
 import com.teamspace.dto.response.interest.MainCategoryResponseDTO;
 import com.teamspace.exception.UserNotFoundException;
 import com.teamspace.oauth.kakao.KakaoOauthService;
-import com.teamspace.repository.InterestDetailCategoryRepository;
-import com.teamspace.repository.InterestMainCategoryRepository;
-import com.teamspace.repository.UserInterestRepository;
-import com.teamspace.repository.UserRepository;
+import com.teamspace.repository.*;
 import com.teamspace.util.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -33,10 +34,9 @@ public class UserService {
     private final KakaoOauthService kakaoOauthService;
     private final UserRepository userRepository;
     private final UserInterestRepository userInterestRepository;
+    private final UserSpotRepository userSpotRepository;
     private final InterestMainCategoryRepository interestMainCategoryRepository;
     private final InterestDetailCategoryRepository interestDetailCategoryRepository;
-
-
 
     private boolean verifyUser(String userEmail) {
         return userRepository.findByEmail(userEmail).isPresent();
@@ -108,7 +108,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void userSelectedInterestCategory(Long userId, UserInterestsDTO userInterestsDTO) {
+    public void userSelectedInterestCategory(Long userId, UserInterestsRequestDTO userInterestsDTO) {
 
         User user = findUser(userId);
 
@@ -119,12 +119,36 @@ public class UserService {
 
             userInterestRepository.saveAll(userInterests);
         }
-
     }
 
-    public void userSelectedInterestSpot(Long userId) {
+    public void userSelectedInterestSpot(Long userId, UserSpotsRequestDTO userSpotsDTO) {
+
+        User user = findUser(userId);
+
+        if(userSpotsDTO.getSpots() != null) {
+            List<UserSpot> userSpots = userSpotsDTO.getSpots().stream()
+                    .map(spot -> UserSpot.createUserSpot(user, spot))
+                    .collect(Collectors.toList());
+
+            userSpotRepository.saveAll(userSpots);
+        }
     }
 
-    public void userSelectedInterests(Long userId) {
+    public void userSelectedInterests(Long userId, UserInterestsAndSpotsRequestDTO userInterestsAndSpotsDTO) {
+
+        User user = findUser(userId);
+
+        if(userInterestsAndSpotsDTO.getInterests() != null) {
+            List<UserInterest> userInterests = userInterestsAndSpotsDTO.getInterests().stream()
+                    .map(interest -> UserInterest.createUserInterest(findInterestDetailCategory(interest.getDetailId()), user))
+                    .collect(Collectors.toList());
+
+            List<UserSpot> userSpots = userInterestsAndSpotsDTO.getSpots().stream()
+                    .map(spot -> UserSpot.createUserSpot(user, spot))
+                    .collect(Collectors.toList());
+
+            userInterestRepository.saveAll(userInterests);
+            userSpotRepository.saveAll(userSpots);
+        }
     }
 }

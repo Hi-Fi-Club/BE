@@ -1,9 +1,6 @@
 package com.teamspace.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -31,5 +28,13 @@ public class UserInterest {
                 .interestDetailCategory(interestDetailCategory)
                 .user(user)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "UserInterest{" +
+                "id=" + id +
+                ", interestDetailCategory=" + interestDetailCategory +
+                '}';
     }
 }
