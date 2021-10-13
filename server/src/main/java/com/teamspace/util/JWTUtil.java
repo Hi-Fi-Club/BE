@@ -18,7 +18,6 @@ public class JWTUtil {
     private static final String USER_NICKNAME = "userNickname";
     private static final Algorithm algorithmHS = Algorithm.HMAC256(SECRET);
 
-
     public static String createToken(Long userId, String userNickname) {
         return JWT.create()
                 .withClaim(USER_ID, userId)

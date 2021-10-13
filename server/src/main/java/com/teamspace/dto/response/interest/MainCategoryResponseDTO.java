@@ -20,5 +20,4 @@ public class MainCategoryResponseDTO {
                 .name(interestMainCategory.getName())
                 .build();
     }
-
 }

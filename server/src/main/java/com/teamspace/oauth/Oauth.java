@@ -1,7 +1,7 @@
 package com.teamspace.oauth;
 
-import com.teamspace.dto.AccessTokenDTO;
-import com.teamspace.dto.UserInfoDTO;
+import com.teamspace.dto.oAuth.AccessTokenDTO;
+import com.teamspace.dto.oAuth.UserInfoDTO;
 
 public interface Oauth {
 
