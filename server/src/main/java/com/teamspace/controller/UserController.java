@@ -30,6 +30,12 @@ public class UserController {
         return ResponseEntity.ok().body("OK");
     }
 
+    @ApiOperation(value = "유저정보 가져오기" , notes = "jwt token으로 유저정보를 받아오기")
+    @GetMapping("/user/info")
+    public ResponseEntity<JWTUserInfoResponseDTO> getUserInfo(@ApiParam(hidden = true) @RequestAttribute Long userId) {
+        return ResponseEntity.ok(userService.getUserInfo(userId));
+    }
+
     @ApiOperation(value = "관심분야 큰 카테고리" , notes = "유저가 선택할 수 있는 관심분야 목록을 클라이언트에 전달한다.")
     @GetMapping("/user/interests/main")
     public ResponseEntity mainCategory() {
